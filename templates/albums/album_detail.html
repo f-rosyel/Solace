@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}{{ album.title }} — Lumière{% endblock %}
+{% block title %}{{ album.title }} — Solace{% endblock %}
 
 {% block content %}
 <div class="album-header">
@@ -9,7 +9,7 @@
     <p class="album-meta-detail">
       By <strong>{{ album.owner.username }}</strong>
       &middot; {{ album.photo_count }} photo{{ album.photo_count|pluralize }}
-      &middot; {% if album.is_public %}Public{% else %}<span class="text-muted">Private</span>{% endif %}
+      &middot; {% if album.visibility == 'public' %}Public{% else %}<span class="text-muted">Private</span>{% endif %}
     </p>
     {% if album.description %}<p class="album-description">{{ album.description }}</p>{% endif %}
   </div>
@@ -26,14 +26,22 @@
 {% if photos %}
   <div class="photo-grid">
     {% for photo in photos %}
-    <a href="{% url 'albums:photo-detail' album.pk photo.pk %}" class="photo-card">
-      <div class="photo-thumb">
-        <img src="{{ photo.image.url }}" alt="{{ photo.title|default:'Photo' }}" loading="lazy" />
-      </div>
-      {% if photo.title %}
-        <p class="photo-title-small">{{ photo.title }}</p>
+    <div class="photo-card-wrapper">
+      <a href="{% url 'albums:photo-detail' album.pk photo.pk %}" class="photo-card">
+        <div class="photo-thumb">
+          <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:'Photo' }}" loading="lazy" />
+        </div>
+        {% if photo.caption %}
+          <p class="photo-title-small">{{ photo.caption }}</p>
+        {% endif %}
+      </a>
+      {% if can_manage %}
+      <form method="post" action="{% url 'albums:set_cover' photo.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline btn-sm">Set as Cover</button>
+      </form>
       {% endif %}
-    </a>
+    </div>
     {% endfor %}
   </div>
 {% else %}

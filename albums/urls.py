@@ -23,4 +23,6 @@ urlpatterns = [
     path('photos/<int:pk>/set-cover/',              views.SetCoverView.as_view(),          name='set_cover'),
     path('albums/<int:album_pk>/photos/<int:pk>/',         views.PhotoDetailView.as_view(), name='photo-detail'),
     path('albums/<int:album_pk>/photos/<int:pk>/delete/',  views.PhotoDeleteView.as_view(), name='photo-delete'),
+    path('albums/<int:pk>/upload/',    views.PhotoUploadView.as_view(), name='photo-create'),
+    path('albums/<int:pk>/edit/',      views.AlbumUpdateView.as_view(), name='album-update'),
 ]

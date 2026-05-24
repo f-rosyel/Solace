@@ -85,6 +85,7 @@ class AlbumDetailView(DetailView):
         ctx['collaborators'] = album.album_collaborators.select_related('user')
         ctx['can_edit']      = is_owner or is_admin
         ctx['can_contribute'] = is_owner or is_contributor
+        ctx['can_manage']    = is_owner or is_admin
         return ctx
 
 
@@ -138,7 +139,7 @@ class AlbumDeleteView(AlbumAdminMixin, DeleteView):
 class PhotoUploadView(AlbumContributorMixin, CreateView):
     model       = Photo
     form_class  = PhotoUploadForm
-    template_name = 'albums/album_detail.html'
+    template_name = 'albums/photo_form.html'
 
     def form_valid(self, form):
         album   = get_object_or_404(Album, pk=self.kwargs['pk'])
